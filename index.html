@@ -219,7 +219,7 @@ h2.d{font-size:12px;color:var(--lime);letter-spacing:3px;margin:16px 2px 8px;tex
 #ff .fb b{font:700 13px Rajdhani,sans-serif;letter-spacing:1px;text-transform:uppercase}#ff .fb.r{text-align:right}
 #ff .fbar{height:12px;border:1px solid rgba(110,165,255,.5);background:rgba(4,5,11,.7);margin-top:3px;overflow:hidden}#ff .fbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#3d86ff,#52e08a);transition:width .12s}#ff .fb.r .fbar i{float:right;background:linear-gradient(90deg,#ff9a2e,#e4675f)}
 #ff .fm{height:4px;margin-top:3px;background:rgba(255,255,255,.08)}#ff .fm i{display:block;height:100%;width:0;background:#ff9a2e;box-shadow:0 0 8px #ff9a2e}#ff .fb.r .fm i{float:right}
-#ff .fw{position:relative;border:1px solid rgba(110,165,255,.42);background:#04050b;overflow:hidden;touch-action:none}#fc{display:block;width:100%;height:330px;touch-action:none}
+#ff .fw{position:relative;border:1px solid rgba(110,165,255,.42);background:#04050b;overflow:hidden;touch-action:none}canvas#fc{display:block;width:100%;height:330px;touch-action:none}
 #fmsg2{position:absolute;left:0;right:0;top:34%;text-align:center;font:700 40px Rajdhani,sans-serif;letter-spacing:4px;color:#fff;text-shadow:3px 3px 0 #000,0 0 18px rgba(255,154,46,.8);pointer-events:none;opacity:0}#fmsg2.go{animation:fm 1s ease-out}@keyframes fm{0%{opacity:0;transform:scale(1.8)}15%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0}}
 #fres{position:absolute;inset:0;background:rgba(2,3,10,.78);display:grid;place-content:center;justify-items:center;gap:14px;text-align:center}#fres[hidden]{display:none}#frt{font:700 26px Rajdhani,sans-serif;letter-spacing:3px;text-shadow:0 0 14px rgba(77,141,255,.8);white-space:pre-line}
 #ff .fctl{display:flex;justify-content:space-between;gap:10px;margin-top:10px;touch-action:none}#ff .dp{display:flex;gap:8px}#ff .dp button{width:54px;height:92px;font-size:22px}
@@ -653,22 +653,59 @@ body:has(#v-work.on) nav button[aria-current=true]{color:#ff8f1f!important;backg
  <div class="sub" style="margin-top:12px">When he is open, swipe up to hit him. When an arrow flashes, swipe that way to dodge, or swipe down to block. A wrong or late move gets you hit. Arrow keys work on a computer.</div>
 </section>
 <section class="view" id="v-fuel">
- <h2 class="d">Fuel</h2>
- <div class="sticker card"><div class="two"><div><div class="unit">Calories left</div><div class="big d" id="fcl">0</div></div><div><div class="unit">Protein left</div><div class="big d" id="fpl">0g</div></div></div>
- <div class="bar"><i id="fcb"></i></div><div class="bar p"><i id="fpb"></i></div></div>
- <h2 class="d">Add food</h2>
- <div class="chips" id="quick" aria-label="Quick add"></div>
- <form class="sticker f" id="ff">
-  <input type="hidden" id="fid">
-  <label>Food<input id="fn" required maxlength="60" placeholder="Tuna pouch"></label>
-  <div class="two"><label>Meal<select id="fm"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option selected>Snack</option></select></label>
-  <label>Servings<input id="fq" type="number" step="0.25" min="0.25" value="1" required></label></div>
-  <div class="two"><label>Calories per serving<input id="fc" type="number" min="0" inputmode="numeric" required></label>
-  <label>Protein (g) per serving<input id="fp" type="number" min="0" step="0.1" inputmode="decimal" required></label></div>
-  <div class="two"><button class="btn" type="submit" id="fsave">Add to today</button><button class="btn alt" type="button" id="fcancel" hidden>Cancel edit</button></div>
+ <div class="fz-head">
+  <div class="fz-eyebrow"><span>FUEL LAB</span></div>
+  <div class="fz-titlerow">
+   <div class="fz-title"><span>FUEL</span><i></i></div>
+   <div class="fz-sub"><span>DAILY INTAKE //</span><span>PERFORMANCE NUTRITION</span></div>
+  </div>
+ </div>
+
+ <section class="fz-panel fz-dash" aria-label="Calories and protein left today">
+  <div class="fz-col">
+   <div class="fz-k">CALORIES LEFT</div>
+   <div class="fz-big" id="fcl">0</div>
+   <div class="fz-meta"><span>CALORIES</span><b id="fcn">0 / 0</b></div>
+   <div class="fz-bar" role="progressbar" aria-label="Calories eaten vs target" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fcb"></i></div>
+   <div class="fz-over" id="fco" aria-live="polite"></div>
+  </div>
+  <div class="fz-col">
+   <div class="fz-k">PROTEIN LEFT</div>
+   <div class="fz-big" id="fpl">0G</div>
+   <div class="fz-meta"><span>PROTEIN</span><b id="fpn">0 / 0G</b></div>
+   <div class="fz-bar" role="progressbar" aria-label="Protein eaten vs target" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fpb"></i></div>
+   <div class="fz-over" id="fpo" aria-live="polite"></div>
+  </div>
+ </section>
+
+ <div class="fz-sec"><span>QUICK ADD</span><em></em><i></i><button type="button" class="fz-mini" id="fqedit" aria-pressed="false">EDIT</button></div>
+ <div class="fz-quick" id="quick" aria-label="Quick add"></div>
+
+ <form class="fz-panel fz-form" id="fuelForm" novalidate autocomplete="off">
+  <input type="hidden" id="fid"><input type="hidden" id="fqi">
+  <div class="fz-ph"><svg class="fz-plus" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5"/><path d="M12 6.5v11M6.5 12h11"/></svg><b>LOG YOUR FUEL</b><em></em><i></i><em></em></div>
+  <label class="fz-lab"><span>FOOD</span><input id="fn" required maxlength="60" placeholder="Tuna pouch" autocomplete="off" autocapitalize="sentences" enterkeyhint="next"></label>
+  <div class="fz-two">
+   <label class="fz-lab"><span>MEAL</span><div class="fz-sel"><select id="fm"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option selected>Snack</option></select><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></label>
+   <label class="fz-lab"><span>SERVINGS</span><input id="fq" type="number" step="0.25" min="0.25" max="99" value="1" inputmode="decimal" enterkeyhint="next"></label>
+  </div>
+  <div class="fz-two">
+   <label class="fz-lab"><span>CALORIES PER SERVING</span><input id="fuelCal" type="number" min="0" inputmode="numeric" placeholder="0" enterkeyhint="next"></label>
+   <label class="fz-lab"><span>PROTEIN (G) PER SERVING</span><input id="fuelPro" type="number" min="0" step="0.1" inputmode="decimal" placeholder="0" enterkeyhint="done"></label>
+  </div>
+  <div class="fz-err" id="ferr" role="alert" hidden></div>
+  <div class="fz-go"><button class="fz-cta" type="submit" id="fsave"><span>ADD TO TODAY</span><b aria-hidden="true">+</b></button></div>
+  <button class="fz-ghost" type="button" id="fcancel" hidden>CANCEL EDIT</button>
  </form>
- <h2 class="d">Today</h2><div id="flist"></div>
- <h2 class="d">Last 7 days</h2><div class="sticker card" id="week"></div>
+
+ <section class="fz-panel fz-today" aria-label="Today's intake">
+  <div class="fz-ph"><b>TODAY&rsquo;S INTAKE</b><em></em><i></i></div>
+  <div id="flist"></div>
+  <div class="fz-total" id="ftot" hidden><span>TODAY TOTAL</span><b><span id="ftc">0 cal</span> <u>&middot;</u> <span id="ftp">0g protein</span></b></div>
+ </section>
+
+ <div class="fz-sec"><span>LAST 7 DAYS</span><em></em><i></i></div>
+ <div class="fz-week" id="week"></div>
 </section>
 
 <section class="view" id="v-me">
@@ -746,6 +783,34 @@ const ICN={"fuel": "data:image/webp;base64,UklGRjxMAABXRUJQVlA4WAoAAAAQAAAAvwAAq
 ICN.pet='data:image/webp;base64,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';const tile=([i,n,s,l,lb])=>`<button class="sticker tile ${l?'live':'lock'}" ${l?`data-go="${i}"`:'disabled'}>${ICN[i]?`<img class="ic" alt="" src="${ICN[i]}">`:`<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${IC[i]}</svg>`}<b>${n}</b><span class="sub" style="${l?'color:#222':''}">${s}</span><span class="tag">${lb||'Live'}</span></button>`;
 $('#tiles').innerHTML=[T[1],T[0],T[2],T[3],T[4],T[5],T[9],T[8]].map(tile).join('');$('#tiles2').innerHTML=T.map(tile).join('');
 const pct=(a,b)=>Math.min(100,b?a/b*100:0)+'%';
+/* ===== FUEL LAB: render + form + handlers ===== */
+const FWX=new Set();let FQE=false;
+const fP=n=>+(+n||0).toFixed(1);
+const fEnt=(f,act)=>{const c=Math.round((+f.cal||0)*(+f.qty||0)),p=fP((+f.pro||0)*(+f.qty||0));return `<div class="fz-it"><div class="fz-itm"><b>${esc(String(f.name))}</b><span>${esc(String(f.meal||''))} &middot; ${f.qty} serving${f.qty==1?'':'s'}</span></div><div class="fz-itn"><b>${c}</b><small>cal</small><b>${p}</b><small>g</small></div>${act?`<div class="fz-acts"><button type="button" class="fz-bt" data-e="${f.id}" aria-label="Edit ${esc(String(f.name))}">EDIT</button><button type="button" class="fz-bt x" data-d="${f.id}" aria-label="Delete ${esc(String(f.name))}">&#10005;</button></div>`:''}</div>`};
+const FZ_EMPTY='<div class="fz-empty"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M8 4v10a4 4 0 0 0 4 4v18M4 4v9M12 4v9M16 4v9"/><path d="M56 4c-5 2-7 8-7 14s3 8 7 8v10M56 4v32"/><circle cx="32" cy="20" r="13"/><path d="m34 11-7 11h6l-3 9 8-12h-6z"/></svg><p>Nothing logged today. Add a food above.</p></div>';
+function fuelRender(cal,pro,t){
+ const set=(id,v)=>{const e=$('#'+id);if(e)e.textContent=v};
+ const cOk=cal>0,pOk=pro>0;
+ const cLeft=cOk?Math.max(0,cal-t.c):0,pLeft=pOk?Math.max(0,pro-t.p):0;
+ const cPr=cOk?Math.min(1,Math.max(0,t.c/cal)):0,pPr=pOk?Math.min(1,Math.max(0,t.p/pro)):0;
+ set('fcl',cOk?Math.round(cLeft):'\u2014');set('fpl',pOk?Math.round(pLeft)+'G':'\u2014');
+ set('fcn',Math.round(t.c)+' / '+(cOk?cal:'\u2014'));set('fpn',Math.round(t.p)+' / '+(pOk?pro+'G':'\u2014'));
+ const cb=$('#fcb'),pb=$('#fpb');cb.style.width=(cPr*100)+'%';pb.style.width=(pPr*100)+'%';
+ cb.parentNode.setAttribute('aria-valuenow',Math.round(cPr*100));pb.parentNode.setAttribute('aria-valuenow',Math.round(pPr*100));
+ const co=$('#fco'),po=$('#fpo');
+ co.textContent=!cOk?'SET TARGET IN ME':t.c>cal?'+'+Math.round(t.c-cal)+' OVER':'';co.classList.toggle('hot',cOk&&t.c>cal);
+ po.textContent=!pOk?'SET TARGET IN ME':t.p>pro?'+'+Math.round(t.p-pro)+'G OVER':'';
+ $('#quick').innerHTML=(S.saved.length||FQE)?S.saved.map((s,i)=>FQE?`<div class="fz-qw"><button type="button" class="fz-qt ed" data-fqe="${i}" aria-label="Replace ${esc(String(s.name))}"><b>${esc(String(s.name))}</b><small>${Math.round(+s.cal||0)} &middot; ${fP(s.pro)}G</small></button><button type="button" class="fz-qx" data-fqd="${i}" aria-label="Remove ${esc(String(s.name))}">&#10005;</button></div>`:`<button type="button" class="fz-qt" data-fq="${i}" aria-label="Quick add ${esc(String(s.name))}, ${Math.round(+s.cal||0)} calories, ${fP(s.pro)} grams protein"><b>${esc(String(s.name))}</b><small>${Math.round(+s.cal||0)} &middot; ${fP(s.pro)}G</small></button>`).join('')+(FQE?'<button type="button" class="fz-qt new" data-fqn="1"><b>+ NEW</b><small>add food</small></button>':''):'<div class="fz-hint">Foods you log show up here for one-tap adding.</div>';$('#fqedit').textContent=FQE?'DONE':'EDIT';$('#fqedit').setAttribute('aria-pressed',FQE);
+ const L=S.foods.filter(f=>f.date===day());
+ $('#flist').innerHTML=L.length?L.map(f=>fEnt(f,true)).join(''):FZ_EMPTY;
+ $('#ftot').hidden=!L.length;set('ftc',Math.round(t.c)+' cal');set('ftp',fP(t.p)+'g protein');
+ const now=new Date();let w='';
+ for(let i=6;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i),k=day(d),x=tot(k),E=S.foods.filter(f=>f.date===k),open=FWX.has(k);
+  const lab=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+  w+=`<button type="button" class="fz-wr${open?' on':''}" data-wk="${k}" aria-expanded="${open}"><span class="fz-wd">${lab}${i===0?'<em>TODAY</em>':''}</span><span class="fz-wv${E.length?'':' no'}">${E.length?Math.round(x.c)+' cal \u00b7 '+Math.round(x.p)+'g protein':'No entries'}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button><div class="fz-wx"${open?'':' hidden'}>${E.length?E.map(f=>fEnt(f,false)).join(''):'<p class="fz-hint">Nothing logged this day.</p>'}</div>`}
+ $('#week').innerHTML=w}
+const FF=id=>$('#fuelForm #'+id);
+function fErr(msg,el){const e=$('#ferr');e.textContent=msg||'';e.hidden=!msg;document.querySelectorAll('#fuelForm [aria-invalid]').forEach(x=>x.removeAttribute('aria-invalid'));if(el){el.setAttribute('aria-invalid','true');el.focus()}}
 function render(){try{renderB()}catch(e){}
  const t=tot(day()),{cal,pro}=S.targets,n=S.foods.filter(f=>f.date===day()).length;
  $('#hc').textContent=Math.round(t.c);$('#hct').textContent='of '+cal;$('#hcb').style.width=pct(t.c,cal);
@@ -753,23 +818,39 @@ function render(){try{renderB()}catch(e){}
  $('#hcr').textContent=n?(cal-t.c>=0?Math.round(cal-t.c)+' left':Math.round(t.c-cal)+' over'):'Nothing logged';
  $('#hpr').textContent=n?(pro-t.p>0?Math.round(pro-t.p)+'g to go':'Target hit'):'Nothing logged';
  $('#nudge').textContent=n?`${n} ${n>1?'entries':'entry'} logged. ${t.p>=pro?'Protein target hit.':Math.round(pro-t.p)+'g protein to go.'}`:'Nothing logged yet today. Start with your first meal.';
- $('#fcl').textContent=Math.round(cal-t.c);$('#fpl').textContent=Math.round(pro-t.p)+'g';$('#fcb').style.width=pct(t.c,cal);$('#fpb').style.width=pct(t.p,pro);
- const L=S.foods.filter(f=>f.date===day());
- $('#flist').innerHTML=L.length?L.map(f=>`<div class="sticker item"><div><b>${esc(f.name)}</b><span class="sub">${f.meal}, ${f.qty} serving${f.qty==1?'':'s'}: ${Math.round(f.cal*f.qty)} cal, ${+(f.pro*f.qty).toFixed(1)}g protein</span></div><div class="acts"><button class="btn alt" data-e="${f.id}" aria-label="Edit ${esc(f.name)}">Edit</button><button class="btn bad" data-d="${f.id}" aria-label="Delete ${esc(f.name)}">X</button></div></div>`).join(''):'<div class="sticker card empty">Nothing logged today. Add a food above.</div>';
- $('#quick').innerHTML=S.saved.length?S.saved.map((s,i)=>`<button class="chip" data-q="${i}">${esc(s.name)}</button>`).join(''):'<span class="sub">Foods you log show up here for one-tap adding.</span>';
- let w='';for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=day(d),x=tot(k);w+=`<div class="sub" style="display:flex;justify-content:space-between;padding:3px 0"><span>${d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</span><span>${S.foods.some(f=>f.date===k)?Math.round(x.c)+' cal, '+Math.round(x.p)+'g':'no entries'}</span></div>`}
- $('#week').innerHTML=w;$('#tc').value=cal;$('#tgp').value=pro;
+ fuelRender(cal,pro,t);$('#tc').value=cal;$('#tgp').value=pro;
 }
-function reset(){$('#ff').reset();$('#fid').value='';$('#fsave').textContent='Add to today';$('#fcancel').hidden=true}
-$('#ff').onsubmit=e=>{e.preventDefault();const o={name:$('#fn').value.trim(),meal:$('#fm').value,qty:+$('#fq').value,cal:+$('#fc').value,pro:+$('#fp').value};if(!o.name||!(o.qty>0))return;
- const id=$('#fid').value;if(id){Object.assign(S.foods.find(f=>f.id==id),o);toast('Entry updated')}else{S.foods.push({id:Date.now(),date:day(),...o});toast('Added')}
- const i=S.saved.findIndex(s=>s.name.toLowerCase()===o.name.toLowerCase());const sv={name:o.name,meal:o.meal,cal:o.cal,pro:o.pro};if(i<0)S.saved.push(sv);else S.saved[i]=sv;
- save();reset();render()};
+function reset(){$('#fuelForm').reset();$('#fid').value='';$('#fqi').value='';$('#fsave').firstElementChild.textContent='ADD TO TODAY';$('#fcancel').hidden=true;fErr('')}
+let fBusy=false;
+$('#fuelForm').addEventListener('submit',e=>{e.preventDefault();if(fBusy)return;
+ const nm=FF('fn'),sv=FF('fq'),cl=FF('fuelCal'),pr=FF('fuelPro'),num=el=>el.value.trim()===''?NaN:Number(el.value);
+ const name=nm.value.trim(),qty=num(sv),cal=num(cl),pro=num(pr);
+ if(!name)return fErr('Enter a food name.',nm);
+ if(!Number.isFinite(qty)||qty<=0)return fErr('Servings must be greater than 0.',sv);
+ if(qty>99)return fErr('Servings can be 99 at most.',sv);
+ if(!Number.isFinite(cal)||cal<0)return fErr('Enter calories per serving (0 or more).',cl);
+ if(cal>10000)return fErr('Calories per serving looks too high. Max 10,000.',cl);
+ if(!Number.isFinite(pro)||pro<0)return fErr('Enter protein per serving in grams (0 or more).',pr);
+ if(pro>1000)return fErr('Protein per serving looks too high. Max 1,000 g.',pr);
+ fErr('');fBusy=true;const b=$('#fsave');b.disabled=true;setTimeout(()=>{fBusy=false;b.disabled=false},700);
+ const o={name,meal:FF('fm').value,qty,cal,pro};
+ const qi=$('#fqi').value;if(qi!==''){const q2={name:o.name,meal:o.meal,cal:o.cal,pro:o.pro};if(+qi>=0&&S.saved[+qi])S.saved[+qi]=q2;else S.saved.push(q2);save();reset();render();toast('Quick add saved');return}
+ const id=$('#fid').value;if(id){const f=S.foods.find(f=>f.id==id);if(f){Object.assign(f,o);toast('Entry updated')}}else{S.foods.push({id:Date.now(),date:day(),...o});toast('Added')}
+ const i=S.saved.findIndex(s=>s.name.toLowerCase()===o.name.toLowerCase());const sv2={name:o.name,meal:o.meal,cal:o.cal,pro:o.pro};if(i<0)S.saved.push(sv2);else S.saved[i]=sv2;
+ save();reset();render()});
 $('#fcancel').onclick=reset;
-document.addEventListener('click',e=>{const d=e.target.closest('[data-d]'),ed=e.target.closest('[data-e]'),q=e.target.closest('[data-q]');
+document.addEventListener('click',e=>{const d=e.target.closest('[data-d]'),ed=e.target.closest('[data-e]'),q=e.target.closest('[data-fq]'),wk=e.target.closest('[data-wk]');
  if(d&&confirm('Delete this entry?')){S.foods=S.foods.filter(f=>f.id!=d.dataset.d);save();render();toast('Deleted')}
- if(ed){const f=S.foods.find(f=>f.id==ed.dataset.e);$('#fid').value=f.id;$('#fn').value=f.name;$('#fm').value=f.meal;$('#fq').value=f.qty;$('#fc').value=f.cal;$('#fp').value=f.pro;$('#fsave').textContent='Save changes';$('#fcancel').hidden=false;$('#fn').focus()}
- if(q){const s=S.saved[q.dataset.q];S.foods.push({id:Date.now(),date:day(),qty:1,...s});save();render();toast('Added '+s.name)}});
+ if(ed){const f=S.foods.find(f=>f.id==ed.dataset.e);if(f){$('#fid').value=f.id;$('#fn').value=f.name;FF('fm').value=f.meal;FF('fq').value=f.qty;FF('fuelCal').value=f.cal;FF('fuelPro').value=f.pro;$('#fsave').firstElementChild.textContent='SAVE CHANGES';$('#fcancel').hidden=false;fErr('');$('#fuelForm').scrollIntoView({behavior:'smooth',block:'center'});$('#fn').focus({preventScroll:true})}}
+ if(q){const s=S.saved[q.dataset.fq];if(!s)return;
+  if(s.cal==null||s.pro==null||!Number.isFinite(+s.cal)||!Number.isFinite(+s.pro)){reset();$('#fn').value=s.name;FF('fm').value=s.meal||'Snack';$('#fuelForm').scrollIntoView({behavior:'smooth',block:'center'});FF('fuelCal').focus({preventScroll:true});toast('Enter calories and protein for '+s.name);return}
+  S.foods.push({id:Date.now(),date:day(),qty:1,...s});save();render();toast('Added '+s.name)}
+ const qe=e.target.closest('[data-fqe]'),qd=e.target.closest('[data-fqd]'),qn=e.target.closest('[data-fqn]'),qt=e.target.closest('#fqedit');
+ if(qt){FQE=!FQE;if(!FQE)reset();render()}
+ if(qe){const s=S.saved[qe.dataset.fqe];if(s){reset();$('#fqi').value=qe.dataset.fqe;$('#fn').value=s.name;FF('fm').value=s.meal||'Snack';FF('fuelCal').value=s.cal==null?'':s.cal;FF('fuelPro').value=s.pro==null?'':s.pro;$('#fsave').firstElementChild.textContent='SAVE QUICK ADD';$('#fcancel').hidden=false;$('#fuelForm').scrollIntoView({behavior:'smooth',block:'center'});$('#fn').focus({preventScroll:true})}}
+ if(qn){reset();$('#fqi').value='-1';$('#fsave').firstElementChild.textContent='SAVE QUICK ADD';$('#fcancel').hidden=false;$('#fuelForm').scrollIntoView({behavior:'smooth',block:'center'});$('#fn').focus({preventScroll:true})}
+ if(qd){const s=S.saved[qd.dataset.fqd];if(s&&confirm('Remove '+s.name+' from Quick Add?')){S.saved.splice(+qd.dataset.fqd,1);save();reset();render();toast('Quick add removed')}}
+ if(wk){const k=wk.dataset.wk,on=!FWX.has(k);on?FWX.add(k):FWX.delete(k);wk.classList.toggle('on',on);wk.setAttribute('aria-expanded',on);wk.nextElementSibling.hidden=!on}});
 $('#tf').onsubmit=e=>{e.preventDefault();S.targets={cal:+$('#tc').value||2200,pro:+$('#tgp').value||150};save();render();toast('Targets saved')};
 function dl(n,t,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),999)}
 $('#exj').onclick=()=>dl('ttfu-nutrition-'+day()+'.json',JSON.stringify({sets:S.sets,targets:S.targets,units:{calories:'kcal',protein:'g'},entries:S.foods},null,2),'application/json');
@@ -1855,5 +1936,107 @@ const g=go;go=function(v){const was=$('#v-shorts').classList.contains('on');g(v)
 #v-song .swab .two input{margin:0}
 nav{grid-template-columns:repeat(5,1fr)!important;gap:0!important}
 body:has(#v-song.on) nav button[aria-current=true]{color:#ff8f1f!important;background:linear-gradient(180deg,#121a2e,#0b1020)!important;box-shadow:inset 0 3px 0 #ff8f1f!important}
+</style>
+<style id="fuelCSS">
+/* ===== FUEL LAB (scoped to #v-fuel; classes prefixed fz-) ===== */
+#v-fuel{--cy:#35d8ff;--bd:#2380e8;--or:#ff8f1f;--or2:#f26200;--tx:#eef3ff;--mt:#8aa6d4;font-family:Rajdhani,system-ui,sans-serif;color:var(--tx);padding:0 0 28px}
+#v-fuel [hidden]{display:none!important}
+html:has(#v-fuel.on){scroll-padding:76px 0 132px}
+body:has(#v-fuel.on) #bgfx{background:linear-gradient(rgba(3,6,16,.30),rgba(3,6,16,.80) 38%,rgba(3,6,16,.93)),var(--bgimg) center top/cover no-repeat}
+/* header */
+#v-fuel .fz-head{padding:8px 2px 0}
+#v-fuel .fz-eyebrow span{font:700 14px/1 Rajdhani,sans-serif;letter-spacing:.34em;color:var(--cy);text-shadow:0 0 10px rgba(53,216,255,.35)}
+#v-fuel .fz-titlerow{display:flex;align-items:center;gap:14px;margin-top:2px;min-width:0}
+#v-fuel .fz-title{flex:none}
+#v-fuel .fz-title span{display:block;padding-right:8px;font:800 italic 74px/.98 'Barlow Condensed','Arial Narrow',Impact,sans-serif;letter-spacing:.01em;text-transform:uppercase;background:linear-gradient(180deg,#fff 0,#eaf0fb 46%,#9aa9c6 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(2px 3px 0 rgba(0,0,0,.7))}
+#v-fuel .fz-title i{display:block;height:4px;margin:0 0 0 6px;width:90%;background:linear-gradient(90deg,var(--cy),#1a7cff);transform:skewX(-35deg);box-shadow:0 0 9px rgba(35,128,232,.7)}
+#v-fuel .fz-sub{display:flex;flex-direction:column;gap:7px;min-width:0;padding:2px 0 2px 14px;border-left:1.5px solid #1d4f9c;font:400 clamp(9.5px,2.75vw,11.5px)/1.1 'Share Tech Mono',monospace;letter-spacing:.16em;color:#dfe8fb}
+/* panels (angular, thin cyan edge) */
+#v-fuel .fz-panel{--c:13px;position:relative;margin:14px 0 0;padding:15px 14px 14px;background:linear-gradient(135deg,#34d6ff 0%,#2a86f0 38%,#1b4fb0 70%,#2fc4ff 100%);clip-path:polygon(var(--c) 0,100% 0,100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,0 100%,0 var(--c))}
+#v-fuel .fz-panel::before{content:"";position:absolute;inset:1.5px;z-index:0;pointer-events:none;background:radial-gradient(90% 70% at 88% 0,rgba(35,110,230,.16),transparent 70%),linear-gradient(180deg,rgba(7,14,34,.93),rgba(4,8,20,.95));clip-path:polygon(calc(var(--c) - 1.2px) 0,100% 0,100% calc(100% - var(--c) + 1.2px),calc(100% - var(--c) + 1.2px) 100%,0 100%,0 calc(var(--c) - 1.2px))}
+#v-fuel .fz-panel>*{position:relative;z-index:1}
+/* section + panel headings */
+#v-fuel .fz-sec{display:flex;align-items:center;gap:10px;margin:22px 2px 9px}
+#v-fuel .fz-sec span{font:400 14px/1 'Share Tech Mono',monospace;letter-spacing:.3em;color:var(--cy);white-space:nowrap}
+#v-fuel .fz-sec em,#v-fuel .fz-ph em{flex:none;width:34px;height:8px;background:repeating-linear-gradient(90deg,#2380e8 0 2px,transparent 2px 5px);transform:skewX(-40deg)}
+#v-fuel .fz-sec i,#v-fuel .fz-ph i{flex:1;height:1px;min-width:10px;background:linear-gradient(90deg,#2380e8,rgba(35,128,232,.3))}
+#v-fuel .fz-ph{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+#v-fuel .fz-ph b{font:400 15px/1 'Share Tech Mono',monospace;letter-spacing:.24em;color:var(--cy);white-space:nowrap}
+#v-fuel .fz-plus{width:24px;height:24px;flex:none}
+#v-fuel .fz-plus rect{fill:var(--cy)}#v-fuel .fz-plus path{fill:none;stroke:#04101f;stroke-width:2.6;stroke-linecap:round}
+/* dashboard */
+#v-fuel .fz-dash{display:grid;grid-template-columns:1fr 1fr;padding:15px 0 14px;margin-top:12px}
+#v-fuel .fz-col{min-width:0;padding:0 14px}
+#v-fuel .fz-col+.fz-col{border-left:1px solid rgba(46,110,200,.55)}
+#v-fuel .fz-k{font:700 14px/1 Rajdhani,sans-serif;letter-spacing:.2em;color:var(--cy);white-space:nowrap}
+#v-fuel .fz-big{margin:8px 0 10px;font:800 58px/1 'Barlow Condensed','Arial Narrow',Impact,sans-serif;letter-spacing:.01em;white-space:nowrap;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#c5cfe6);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(1px 2px 0 rgba(0,0,0,.6))}
+#v-fuel .fz-meta{display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:baseline;gap:2px 4px;font:700 11px/1 Rajdhani,sans-serif;letter-spacing:.06em;color:var(--cy)}
+#v-fuel .fz-meta b{font:400 11px/1 'Share Tech Mono',monospace;letter-spacing:0;color:#dfe8fb;white-space:nowrap}
+#v-fuel .fz-bar{height:12px;margin-top:7px;padding:1px;border:1px solid #2a74d0;border-radius:6px;background:rgba(4,8,20,.85);overflow:hidden}
+#v-fuel .fz-bar i{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(180deg,#5ae4ff,#12a8ff);box-shadow:0 0 8px rgba(40,190,255,.55);transition:width .5s cubic-bezier(.3,1.2,.5,1)}
+#v-fuel .fz-over{min-height:13px;margin-top:6px;font:700 11px/1 Rajdhani,sans-serif;letter-spacing:.16em;color:var(--cy)}
+#v-fuel .fz-over.hot{color:var(--or)}
+/* quick add */
+#v-fuel .fz-quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+#v-fuel .fz-qt{position:relative;min-width:0;min-height:60px;padding:9px 6px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;border:1px solid #2a74d0;border-radius:6px;background:linear-gradient(180deg,rgba(10,20,44,.92),rgba(5,10,24,.94));color:var(--tx);box-shadow:inset 0 0 12px rgba(35,110,230,.12)}
+#v-fuel .fz-qt::after{content:"";position:absolute;left:-1px;bottom:-1px;width:13px;height:13px;border-left:3px solid var(--or);border-bottom:3px solid var(--or);border-radius:0 0 0 6px;pointer-events:none}
+#v-fuel .fz-qt b{max-width:100%;font:700 14px/1.08 Rajdhani,sans-serif;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#v-fuel .fz-qt small{font:400 10px/1 'Share Tech Mono',monospace;letter-spacing:.04em;color:var(--mt)}
+#v-fuel .fz-qt:active{transform:scale(.97);border-color:var(--cy)}
+#v-fuel .fz-hint{margin:0;padding:4px 2px;font:500 14px/1.3 Rajdhani,sans-serif;letter-spacing:.04em;color:var(--mt)}
+#v-fuel .fz-quick .fz-hint{grid-column:1/-1}
+/* form */
+#v-fuel .fz-lab{display:block;min-width:0;margin:0 0 11px;color:inherit}
+#v-fuel .fz-lab>span{display:block;margin:0 0 5px;font:700 clamp(9.5px,2.55vw,11px)/1.1 Rajdhani,sans-serif;letter-spacing:.04em;color:var(--cy);text-transform:uppercase;white-space:nowrap}
+#v-fuel .fz-lab input,#v-fuel .fz-lab select{display:block;width:100%;min-width:0;height:48px;min-height:48px;margin:0;padding:0 14px;border:1.5px solid #2a74d0!important;border-radius:6px!important;background:rgba(4,9,22,.92)!important;box-shadow:none!important;color:#eef3ff;font:500 17px/1 -apple-system,'SF Pro Text',Inter,Outfit,system-ui,sans-serif;outline:0;-webkit-appearance:none;appearance:none;-moz-appearance:textfield}
+#v-fuel .fz-lab input::-webkit-outer-spin-button,#v-fuel .fz-lab input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+#v-fuel .fz-lab input::placeholder{color:#6f86ad;opacity:1}
+#v-fuel .fz-lab input:focus,#v-fuel .fz-lab select:focus{border-color:var(--cy)!important;box-shadow:0 0 0 1px rgba(53,216,255,.35)!important}
+#v-fuel .fz-lab [aria-invalid=true]{border-color:#ff6b5f!important}
+#v-fuel .fz-sel{position:relative}
+#v-fuel .fz-sel select{padding-right:38px}
+#v-fuel .fz-sel svg{position:absolute;right:11px;top:50%;width:20px;height:20px;margin-top:-10px;fill:none;stroke:var(--cy);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+#v-fuel .fz-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#v-fuel .fz-err{margin:0 0 10px;padding:8px 10px;border:1px solid rgba(255,107,95,.6);background:rgba(255,107,95,.1);color:#ffb3ac;font:600 14px/1.25 Rajdhani,sans-serif;letter-spacing:.04em}
+#v-fuel .fz-go{margin-top:4px;filter:drop-shadow(0 4px 9px rgba(255,120,20,.4))}
+#v-fuel .fz-cta{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;height:52px;margin:0;padding:0 16px;border:0;background:linear-gradient(180deg,#ffa23a,var(--or2));color:#1a0d00;font:800 17px/1 Rajdhani,sans-serif;letter-spacing:.22em;text-transform:uppercase;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px)}
+#v-fuel .fz-cta b{font:700 24px/1 Rajdhani,sans-serif;letter-spacing:0}
+#v-fuel .fz-cta:active{transform:scale(.985)}
+#v-fuel .fz-cta:disabled{opacity:.55}
+#v-fuel .fz-ghost{display:block;width:100%;height:44px;margin:10px 0 0;border:1.5px solid #27437a;border-radius:6px;background:none;color:#b9cffa;font:700 14px/1 Rajdhani,sans-serif;letter-spacing:.18em}
+/* today */
+#v-fuel .fz-today .fz-ph{margin-bottom:6px}
+#v-fuel .fz-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:8px 0 6px;text-align:center}
+#v-fuel .fz-empty svg{width:96px;height:60px;fill:none;stroke:var(--cy);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#v-fuel .fz-empty p{margin:0;font:500 16px/1.3 -apple-system,'SF Pro Text',Inter,Outfit,system-ui,sans-serif;color:#dfe8fb}
+#v-fuel .fz-it{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(42,100,190,.35)}
+#v-fuel .fz-it:first-child{border-top:0}
+#v-fuel .fz-itm{flex:1;min-width:0}
+#v-fuel .fz-itm b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 17px/1.1 Rajdhani,sans-serif;color:#fff}
+#v-fuel .fz-itm span{display:block;margin-top:3px;font:500 13px/1.1 Rajdhani,sans-serif;letter-spacing:.04em;color:var(--mt)}
+#v-fuel .fz-itn{flex:none;display:flex;align-items:baseline;gap:2px;white-space:nowrap}
+#v-fuel .fz-itn b{font:400 14px/1 'Share Tech Mono',monospace;color:#fff}
+#v-fuel .fz-itn small{margin-right:6px;font:500 11px/1 Rajdhani,sans-serif;letter-spacing:.06em;color:var(--mt)}
+#v-fuel .fz-itn small:last-child{margin-right:0}
+#v-fuel .fz-acts{flex:none;display:flex;gap:6px}
+#v-fuel .fz-bt{min-width:42px;height:40px;padding:0 10px;border:1px solid #2a4a85;border-radius:6px;background:rgba(7,14,32,.9);color:#b9cffa;font:700 12px/1 Rajdhani,sans-serif;letter-spacing:.12em}
+#v-fuel .fz-bt.x{min-width:40px;padding:0;color:#ff9a90;border-color:rgba(255,107,95,.5)}
+#v-fuel .fz-total{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;padding-top:11px;border-top:1px solid #2380e8}
+#v-fuel .fz-total>span{font:700 12px/1 Rajdhani,sans-serif;letter-spacing:.2em;color:var(--cy)}
+#v-fuel .fz-total b{font:400 14px/1.2 'Share Tech Mono',monospace;color:#fff;text-align:right}
+#v-fuel .fz-total u{text-decoration:none;color:var(--mt)}
+/* last 7 days */
+#v-fuel .fz-week{border:1px solid #2a74d0;border-radius:4px;background:rgba(5,10,24,.88);overflow:hidden}
+#v-fuel .fz-wr{display:flex;align-items:center;gap:8px;width:100%;min-height:46px;margin:0;padding:9px 12px;border:0;border-radius:0;background:none;color:var(--tx);text-align:left}
+#v-fuel .fz-wr:not(:first-child){border-top:1px solid rgba(42,100,190,.3)}
+#v-fuel .fz-wd{flex:none;white-space:nowrap;font:600 16px/1.1 -apple-system,'SF Pro Text',Inter,Outfit,system-ui,sans-serif}
+#v-fuel .fz-wd em{margin-left:8px;padding:2px 5px;border-radius:3px;background:var(--cy);color:#04101f;font:700 10px/1 Rajdhani,sans-serif;font-style:normal;letter-spacing:.16em;vertical-align:middle}
+#v-fuel .fz-wv{flex:1 1 0;min-width:0;text-align:right;font:500 13.5px/1.15 Rajdhani,sans-serif;letter-spacing:.03em;color:#dfe8fb}
+#v-fuel .fz-wv.no{color:var(--mt)}
+#v-fuel .fz-wr svg{flex:none;width:18px;height:18px;fill:none;stroke:var(--cy);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+#v-fuel .fz-wr.on svg{transform:rotate(90deg)}
+#v-fuel .fz-wx{padding:2px 12px 8px 20px;border-top:1px dashed rgba(42,100,190,.4);background:rgba(3,7,18,.7)}
+/* narrow phones */
+@media(max-width:359px){#v-fuel .fz-meta{flex-wrap:wrap}#v-fuel .fz-ph em,#v-fuel .fz-sec em{display:none}#v-fuel .fz-two{grid-template-columns:1fr;gap:0}#v-fuel .fz-big{font-size:46px}#v-fuel .fz-titlerow{flex-wrap:wrap;gap:4px}#v-fuel .fz-sub{padding-left:2px;border-left:0}#v-fuel .fz-quick{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}#v-fuel .fz-wr{flex-wrap:wrap}#v-fuel .fz-wv{flex:1 0 100%;text-align:left;order:3}}
 </style>
 </body></html>
